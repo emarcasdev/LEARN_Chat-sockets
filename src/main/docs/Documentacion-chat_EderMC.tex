@@ -1,0 +1,280 @@
+\documentclass[a4paper,12pt]{article}
+% ===== Idioma y codificación =====
+\usepackage[spanish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+% ===== Tipografía =====
+\usepackage{mathpazo}
+% ===== Márgenes =====
+\usepackage[margin=2.5cm]{geometry}
+% ===== Interlineado =====
+\usepackage{setspace}
+\onehalfspacing  % 1.5
+% ===== Imagenes =====
+\usepackage{graphicx}
+\graphicspath{{images/}}
+\usepackage{caption}
+\captionsetup[figure]{labelfont=bf,labelsep=period,name=Figura}
+% ===== Tablas =====
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{float}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{C}{>{\centering\arraybackslash}X}
+\captionsetup[table]{labelfont=bf,labelsep=period,name=Tabla}
+% ===== Hipervínculos =====
+\usepackage{xurl}
+\usepackage[
+  colorlinks=true,
+  linkcolor=black,
+  urlcolor=blue,
+  citecolor=black,
+  breaklinks=true
+]{hyperref}
+% ===== Código =====
+\usepackage{xcolor}
+\usepackage{listings}
+\definecolor{codebg}{RGB}{245,245,245}
+\lstdefinestyle{bash}{
+  language=bash,
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color{codebg},
+  frame=single,
+  breaklines=true,
+  showstringspaces=false
+}
+% ===== Estilo de secciones =====
+\usepackage{titlesec}
+\titleformat{\section}{\Large\bfseries}{\thesection}{0.5em}{}
+\titleformat{\subsection}{\large\bfseries}{\thesubsection}{0.5em}{}
+% ===== Encabezado y pie =====
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{Chat Multi-Usuario}
+\fancyhead[R]{2º DAM}
+\fancyfoot[C]{\thepage}
+% ===== Bibliografía =====
+\usepackage[style=apa,sorting=nyt,backend=biber]{biblatex}
+\addbibresource{bibliografia.bib}
+\usepackage{csquotes}
+% ===== Índice =====
+\usepackage{tocloft}
+\renewcommand{\contentsname}{}
+\addto\captionsspanish{\renewcommand{\contentsname}{}}
+\setlength{\cftbeforesecskip}{4pt}
+\setlength{\cftbeforesubsecskip}{2pt}
+\setlength{\cftsecindent}{0pt}
+\setlength{\cftsubsecindent}{1.5em}
+\renewcommand{\cftsecfont}{\bfseries}
+\renewcommand{\cftsubsecfont}{\normalfont}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\renewcommand{\cftsubsecleader}{\cftdotfill{\cftdotsep}}
+\renewcommand{\cftsubsubsecleader}{\cftdotfill{\cftdotsep}}
+
+
+% ===== Documento =====
+\begin{document}
+
+\begin{titlepage}
+  \centering
+  \vspace*{3cm}
+
+  {\Huge\bfseries Documentación Chat Multi-Usuario\par}
+  \vspace{1.5cm}
+
+  {\Large Chat multi-usuario empleando sockets y threads en Java\par}
+  \vspace{2cm}
+
+  {\large Eder Martínez Castro\par}
+  \vspace{0.5cm}
+
+  {\large Desarrollo de Aplicaciones Multiplataforma\par}
+  \vfill
+
+  {\large \today\par}
+\end{titlepage}
+
+\begin{center}
+  {\Large\bfseries Tabla de contenidos}
+\end{center}
+\tableofcontents
+\clearpage
+
+\section{Objetivo}
+\noindent El objetivo de esta práctica es \textbf{desarrollar} un \textbf{chat multi-usuario} en \texttt{Java} y \texttt{JavaFX} para la interfaz,
+utilizando \textbf{sockets} para la comunicación cliente-servidor. Donde se busca que múltiples usuarios puedan conectarse simultáneamente y enviar mensajes
+que lleguen al resto de usuarios en tiempo real.
+
+\section{Análisis y Especificación de Requisitos}
+
+\subsection{Descripción del problema}
+\noindent Se necesita desarrollar una aplicación de chat que tenga lo siguiente:
+\begin{itemize}
+    \item Un \textbf{servidor}, que escuche conexiones entrantes en un puerto TCP.
+    \item Que varios \textbf{usuarios} puedan conectarse con un nombre de usuario.
+    \item Los mensajes enviados por un usuario, se envían a todos los usuarios conectados.
+    \item La interfaz gráfica debe mostrar los mensajes diferenciando entre mensajes del \textbf{sistema}, \textbf{propios} y de \textbf{otros usuarios}.
+\end{itemize}
+
+
+\subsection{Requisitos funcionales}
+\noindent A continuación, se listan los requisitos funcionales del sistema:
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{@{}>{\bfseries}l Y@{}}
+\toprule
+ID & Requisito \\ \midrule
+RF-01 & El cliente debe permitir introducir un nombre y poder conectarse al servidor. \\
+RF-02 & El servidor debe aceptar múltiples conexiones simultáneas. \\
+RF-03 & El cliente debe enviar mensajes de texto al servidor. \\
+RF-04 & El servidor debe reenviar los mensajes recibidos a todos los usuarios conectados. \\
+RF-05 & El cliente debe mostrar mensajes del sistema cuando alguien se conecta o desconecta. \\
+RF-06 & El cliente debe permitir desconectarse escribiendo \texttt{salir}. \\
+RF-07 & La interfaz debe diferenciar visualmente los mensajes propios, de los de los demás usuarios y de información. \\
+\bottomrule
+\end{tabularx}
+\caption{Requisitos funcionales del chat multi-usuario}
+\end{table}
+
+\subsection{Requisitos no funcionales}
+\noindent A continuación, se listan los requisitos no funcionales del sistema:
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{@{}>{\bfseries}l Y@{}}
+\toprule
+ID & Requisito \\ \midrule
+RNF-01 & El sistema debe soportar un máximo de 10 usuarios concurrentes. \\
+RNF-02 & El servidor debe manejar desconexiones de forma segura liberando los recursos. \\
+\bottomrule
+\end{tabularx}
+\caption{Requisitos no funcionales del chat multi-usuario}
+\end{table}
+
+\section{Arquitectura del Sistema}
+
+\subsection{Arquitectura General}
+\noindent La aplicación emplea la arquitectura \textbf{cliente-servidor} utilizando \textbf{sockets}.
+
+\begin{itemize}
+  \item \textbf{Servidor (Server)}:
+  \begin{itemize}
+    \item Abre un \texttt{ServerSocket} en el puerto \texttt{8080} y acepta conexiones.
+    \item Atiende a cada usuario de forma concurrente (hilos) para permitir varios usuarios al mismo tiempo.
+    \item Reenvía los mensajes a todos los usuarios conectados mediante \texttt{broadcast}.
+  \end{itemize}
+
+  \item \textbf{Cliente (JavaFX)}:
+  \begin{itemize}
+    \item Se organiza con \textbf{MVC} (Modelo: \texttt{ChatMessage}, Vista: \texttt{FXML/CSS}, Controlador: \texttt{ChatController}).
+    \item Se conecta al servidor mediante un \texttt{Socket}.
+    \item La obtención de los mensajes se maneja en otro \textbf{hilo} para no bloquear la UI.
+  \end{itemize}
+
+  \item \textbf{Comunicación}:
+  \begin{itemize}
+    \item Los mensajes se envían como \textbf{líneas de texto}.
+    \item Al conectarse, el usuario envía primero su \textbf{nombre}.
+    \item El comando \texttt{salir} desconecta al usuario.
+  \end{itemize}
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{ModeloClienteServidor.png}
+\caption{Diagrama de la arquitectura cliente-servidor}
+\end{figure}
+
+\subsection{Clases}
+\noindent A continuación se describen las clases utilizadas en el chat multi-usuario:
+
+\subsubsection{Server}
+\noindent La clase \texttt{Server} implementa el servidor del chat, su función principal es la de \textbf{escuchar conexiones} y gestionar varios usuarios de forma concurrente:
+\begin{itemize}
+  \item Inicia un \texttt{ServerSocket} en el puerto \texttt{8080} y permanece en un bucle aceptando conexiones con \texttt{accept()}.
+  \item Por cada usuario conectado, obtiene un \texttt{Socket} y lo asigna a una tarea del \textbf{pool de hilos}.
+  \item Guarda el \texttt{PrintWriter} de cada usuario conectado para poder enviar el mismo mensaje a todos.
+\end{itemize}
+
+\noindent \textbf{Concurrencia:} se utiliza un \texttt{FixedThreadPool} con un máximo de \texttt{10} hilos, atendiendo varios usuarios a la vez sin crear hilos ilimitados.
+
+\noindent \textbf{Difusión de mensajes:} el método \texttt{broadcast(...)} recorre \texttt{writers} y envía el mensaje a todos los usuarios que estén conectados.
+
+\clearpage
+
+\subsubsection{UserManager}                              
+\noindent \texttt{UserManager} es una clase interna que se encarga de gestionar a un usuario conectado:
+\begin{itemize}
+  \item Obtiene el nombre del usuario y añade su \texttt{PrintWriter} a la lista \texttt{writers} para poder enviarle mensajes aparte de notificar la conexión del usuario.
+  \item Escucha los mensajes en un bucle con \texttt{readLine()}.
+  \item Si recibe \texttt{salir}, desconecta al usuario y notifica la desconexión.
+  \item Al terminar, se elimina el \texttt{PrintWriter} del usuario de la lista \texttt{writers}, se notifica la desconexión y se cierra el socket.
+\end{itemize}
+
+\subsubsection{Client}
+\noindent La clase \texttt{Client} se encarga de establecer y mantener la conexión con el servidor mediante un \texttt{Socket}, además de enviar y recibir mensajes:
+\begin{itemize}
+  \item En \texttt{connect(...)} se crea el socket y se inicializan los streams de entrada/salida usando UTF-8.
+  \item Envía el nombre del usuario al servidor.
+  \item Permite enviar mensajes con \texttt{send(...)} y cerrar la conexión con \texttt{close()}.
+\end{itemize}
+
+\noindent \textbf{Uso de Thread listener:} para no bloquear la interfaz, al conectar se inicia un hilo que escucha mensajes del servidor con \texttt{readLine()} y los entrega al controlador usando \texttt{Consumer<String> message}.
+
+\subsubsection{ChatController}
+\noindent \texttt{ChatController} es el controlador JavaFX encargado de gestionar la interfaz y coordinar la comunicación con el servidor:
+\begin{itemize}
+  \item Valida el nombre y llama a \texttt{client.connect(...)}.
+  \item Habilita o deshabilita elementos de la interfaz según si está conectado o no.
+  \item Envía mensajes con \texttt{client.send(...)} y limpia el campo para escribir el mensaje.
+  \item Si el usuario escribe \texttt{salir}, envía el comando al servidor, cierra el socket y la aplicación.
+\end{itemize}
+
+\noindent \textbf{Actualización segura de la interfaz:} como los mensajes se reciben desde otro hilo, el controlador usa \texttt{Platform.runLater(...)} para añadir los mensajes en el \texttt{ListView} evitando así errores de concurrencia en JavaFX.
+
+\subsubsection{ChatMessage}
+\noindent \texttt{ChatMessage} es el modelo de datos que utiliza la interfaz para mostrar los mensajes. Incluye los diferentes tipos de mensaje (\texttt{INFO}, \texttt{ME}, \texttt{OTHER}) esto permite aplicar los estilos adecuados a la vista:
+\begin{itemize}
+  \item \texttt{INFO}: mensajes del sistema (conexión/desconexión).
+  \item \texttt{ME}: mensajes enviados por el propio usuario.
+  \item \texttt{OTHER}: mensajes enviados por otros usuarios.
+\end{itemize}
+
+\subsection{Stack empleado}
+\noindent Para el desarrollo de nuestra aplicación hemos utilizado las siguientes tecnologías:
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{@{}l Y@{}}
+\toprule
+Tecnología & Uso \\ \midrule
+Java & Lenguaje utilizado en el desarrollo de la aplicación. \\
+JavaFX & Interfaz gráfica del cliente. \\
+Sockets & Comunicación cliente-servidor orientada a conexión. \\
+Threads / ExecutorService & Concurrencia para atender múltiples usuarios y poder escuchar los mensajes sin bloquear interfaz. \\
+FXML + CSS & Definición de la interfaz y estilos. \\
+\bottomrule
+\end{tabularx}
+\caption{Tecnologías utilizadas}
+\end{table}
+
+\subsection{Interfaz}
+\noindent La interfaz gráfica está compuesta por los siguientes elementos:
+\begin{itemize}
+  \item \textbf{Header}: formado por un campo para escribir el nombre y el botón de conexión.
+  \item \textbf{Lista de mensajes}: \texttt{ListView} con celdas personalizadas para mostrar todos los distintos tipos de mensajes:
+  \begin{itemize}
+    \item \textbf{Mensajes del sistema}: mensajes centrados con color destacado.
+    \item \textbf{Mensajes propios}: mensajes alineados a la derecha.
+    \item \textbf{Mensajes de otros usuarios}: mensajes alineados a la izquierda.
+  \end{itemize}
+  \item \textbf{Footer}: formado por un campo para escribir mensajes y el botón de envío.
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{ProgramaFuncionando.png}
+\caption{Interfaz gráfica del chat multi-usuario}
+\end{figure}
+
+\end{document}
