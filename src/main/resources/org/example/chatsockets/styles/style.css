@@ -1,0 +1,137 @@
+/* APP CONTAINER */
+.container-app {
+    -fx-padding: 10;
+    -fx-background-color: #000;
+    -fx-font-size: 14px;
+}
+
+/* HEADER */
+.header {
+    -fx-padding: 10;
+    -fx-background-color: #ffffff0a;
+    -fx-border-color: #ffffff0f;
+    -fx-background-radius: 14;
+    -fx-border-radius: 14;
+}
+
+.label-name {
+    -fx-text-fill: #ffffffcc;
+}
+
+.username {
+    -fx-padding: 10 12 10 12;
+    -fx-background-color: #ffffff0a;
+    -fx-text-fill: #ffffffcc;
+    -fx-border-color: #ffffff1a;
+    -fx-background-radius: 14;
+    -fx-border-radius: 14;
+}
+
+/* BUTTON */
+.button {
+    -fx-padding: 10 14 10 14;
+    -fx-background-color: #079C2F;
+    -fx-text-fill: white;
+    -fx-font-weight: 700;
+    -fx-background-radius: 14;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #057022;
+}
+
+/* MESSAGES CONTAINER  */
+.container-messages {
+    -fx-padding: 8;
+    -fx-background-color: #ffffff08;
+    -fx-border-color: #ffffff14;
+    -fx-border-radius: 16;
+    -fx-background-radius: 16;
+}
+
+.container-messages .list-cell {
+    -fx-background-color: transparent;
+}
+
+/* MESSAGE BUBBLES */
+.bubble {
+    -fx-padding: 8 12 8 12;
+    -fx-background-radius: 14;
+    -fx-border-radius: 14;
+    -fx-wrap-text: true;
+    -fx-font-size: 14px;
+}
+
+.info {
+    -fx-alignment: CENTER;
+}
+.info .bubble {
+    -fx-background-color: #f4c10bcc;
+    -fx-text-fill: #000000cc;
+}
+
+.other {
+    -fx-alignment: CENTER_LEFT;
+}
+.other .bubble {
+    -fx-background-color: #ffffff0f;
+    -fx-text-fill: #fff;
+}
+
+.me {
+    -fx-alignment: CENTER_RIGHT;
+}
+.me .bubble {
+    -fx-background-color: #077005;
+    -fx-text-fill: #fff;
+}
+
+/* PERSONALIZE SCROLLBAR */
+.chat-list .scroll-bar,
+.scroll-bar {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical .track,
+.scroll-bar:horizontal .track {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-bar:vertical .thumb,
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: #ffffff0a;
+    -fx-background-radius: 10;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-shape: " ";
+    -fx-padding: 0;
+}
+
+/* FOOTER */
+.footer {
+    -fx-padding: 10;
+    -fx-background-color: #ffffff0a;
+    -fx-border-color: #ffffff0f;
+    -fx-background-radius: 14;
+    -fx-border-radius: 14;
+}
+
+.input-message {
+    -fx-padding: 10 12 10 12;
+    -fx-background-color: #ffffff0a;
+    -fx-text-fill: #ffffffcc;
+    -fx-prompt-text-fill: #ffffff73;
+    -fx-border-color: #ffffff1a;
+    -fx-background-radius: 14;
+    -fx-border-radius: 14;
+}

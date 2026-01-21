@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+
+<VBox spacing="10" xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.chatsockets.ChatController"
+      styleClass="container-app">
+    <stylesheets>
+        <URL value="@styles/style.css"/>
+    </stylesheets>
+
+    <!-- HEADER-->
+    <HBox spacing="8" alignment="CENTER_LEFT" styleClass="header">
+        <Label text="NOMBRE:" styleClass="label-name"/>
+        <TextField fx:id="inputName" promptText="" HBox.hgrow="ALWAYS" styleClass="username"/>
+        <Button fx:id="buttonConnect" text="CONECTAR" onAction="#connectToChat" styleClass="button"/>
+    </HBox>
+
+    <!-- MESSAGES CONTAINER -->
+    <ListView fx:id="listMessages" VBox.vgrow="ALWAYS" styleClass="container-messages"/>
+
+    <!-- FOOTER -->
+    <HBox spacing="8" styleClass="footer">
+        <TextField fx:id="inputMessage" promptText="Mensaje" HBox.hgrow="ALWAYS"
+                   onAction="#sendMessage" styleClass="input-message"/>
+        <Button fx:id="buttonSend" text="ENVIAR" onAction="#sendMessage" styleClass="button"/>
+    </HBox>
+</VBox>
